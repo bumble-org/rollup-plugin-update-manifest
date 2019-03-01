@@ -1,7 +1,7 @@
 {
   "name": "rollup-plugin-update-manifest",
   "version": "0.1.0",
-  "description": "Update manifest.permissions automatically",
+  "description": "Update your Chrome Extension manifest.json automatically.",
   "main": "index.js",
   "files": [
     "index.js"
@@ -21,9 +21,8 @@
   },
   "keywords": [
     "rollup-plugin",
-    "stringify",
-    "string",
-    "template"
+    "chrome-extension",
+    "manifest.json"
   ],
   "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
   "license": "MIT",
