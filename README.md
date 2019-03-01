@@ -18,6 +18,7 @@ rollup({
   entry: 'main.js',
   plugins: [
     updateManifest({
+      // Any missing required fields will be derived from `package.json`
       src: 'src/manifest.js',
       dest: 'dest/manifest.js'
     })

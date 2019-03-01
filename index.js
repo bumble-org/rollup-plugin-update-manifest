@@ -2,6 +2,10 @@ const { existsSync } = require('fs')
 const jsonfile = require('jsonfile')
 const startCase = require('lodash.startcase')
 
+/* ============================================ */
+/*               CHECK PERMISSIONS              */
+/* ============================================ */
+
 const cookies = s => /chrome\.cookies/.test(s)
 
 const contextMenus = s => /chrome\.contextMenus/.test(s)
@@ -35,6 +39,10 @@ const checkPermissions = code =>
     .filter(([, fn]) => fn(code))
     .map(([key]) => key)
 
+/* ============================================ */
+/*              DERIVE PERMISSIONS              */
+/* ============================================ */
+
 const derivePermissions = (code, oldPerms = []) => {
   const set = new Set(oldPerms)
 
@@ -45,6 +53,11 @@ const derivePermissions = (code, oldPerms = []) => {
   return [...set]
 }
 
+/* ============================================ */
+/*                DERIVE MANIFEST               */
+/* ============================================ */
+
+// This may need to be found another way.
 const {
   name,
   version,
@@ -71,22 +84,25 @@ const deriveManifest = srcManifest => {
 
 function updateManifest({ src, dest } = {}) {
   if (!src || !dest) {
-    throw Error('manifest path should be specified')
+    throw Error('paths.src and paths.dest should be specified')
   }
 
   return {
     name: 'updateManifest',
 
     writeBundle(bundle) {
+      // Does the source manifest really need to exist?
       if (!existsSync(src)) {
         throw Error('source manifest must exist')
       }
 
+      const srcManifest = jsonfile.readFileSync(src)
+
+      // Get first code in the bundle
+      // Should probably get the code from the main output
       const { code } = Object.values(bundle).find(
         ({ code }) => code
       )
-
-      const srcManifest = jsonfile.readFileSync(src)
 
       const manifest = deriveManifest(srcManifest)
 
