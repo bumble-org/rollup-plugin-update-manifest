@@ -1,11 +1,6 @@
 # rollup-plugin-update-manifest
 
-Update your Chrome Extension manifest.json automatically.
-
-```js
-import tpl from './tpl.html'
-console.log(`Template for render: ${tpl}`)
-```
+Update your Chrome Extension `manifest.json` automatically.
 
 ## Installation
 
@@ -17,17 +12,14 @@ npm i rollup-plugin-update-manifest -D
 
 ```js
 import { rollup } from 'rollup'
-import { string } from 'rollup-plugin-update-manifest'
+import { updateManifest } from 'rollup-plugin-update-manifest'
 
 rollup({
   entry: 'main.js',
   plugins: [
-    string({
-      // Required to be specified
-      include: '**/*.html',
-
-      // Undefined by default
-      exclude: ['**/index.html']
+    updateManifest({
+      src: 'src/manifest.js',
+      dest: 'dest/manifest.js'
     })
   ]
 })
