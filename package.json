@@ -1,7 +1,7 @@
 {
-  "name": "rollup-plugin-update-manifest",
+  "name": "rollup-plugin-auto-manifest",
   "version": "0.1.0",
-  "description": "Update your Chrome Extension manifest.json automatically.",
+  "description": "Create and update your Chrome Extension manifest.json automagically ✨.",
   "main": "index.js",
   "files": [
     "index.js"
@@ -15,19 +15,13 @@
     "rollup": "^1.4.0"
   },
   "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bumble-org/rollup-plugin-update-manifest.git"
-  },
+  "repository": "bumble-org/rollup-plugin-auto-manifest",
   "keywords": [
     "rollup-plugin",
     "chrome-extension",
-    "manifest.json"
+    "manifest.json",
+    "automation"
   ],
   "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bumble-org/rollup-plugin-update-manifest/issues"
-  },
-  "homepage": "https://github.com/bumble-org/rollup-plugin-update-manifest"
+  "license": "MIT"
 }

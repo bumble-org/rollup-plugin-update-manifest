@@ -1,6 +1,15 @@
 /* eslint-env node */
 
-import updateManifest from './index'
+import manifest from './index'
+import pkg from './package.json'
+
+const plugins = [
+  manifest({
+    src: 'fixtures/src/manifest.json',
+    dest: 'fixtures/dest/manifest.json',
+    pkg
+  })
+]
 
 export default [
   {
@@ -11,11 +20,16 @@ export default [
         format: 'esm'
       }
     ],
-    plugins: [
-      updateManifest({
-        src: 'fixtures/src/manifest.json',
-        dest: 'fixtures/dest/manifest.json'
-      })
-    ]
+    plugins
+  },
+  {
+    input: 'fixtures/src/content.js',
+    output: [
+      {
+        file: 'fixtures/dest/content.js',
+        format: 'esm'
+      }
+    ],
+    plugins
   }
 ]
