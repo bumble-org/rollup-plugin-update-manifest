@@ -11,7 +11,7 @@ const {
 /* ============================================ */
 
 function manifest({ src, dest, pkg } = {}) {
-  console.count('manifest')
+  // console.count('manifest')
 
   if (!src) {
     // TODO: write better error message
@@ -36,7 +36,7 @@ function manifest({ src, dest, pkg } = {}) {
     name: 'manifest',
 
     transform(code, id) {
-      console.count('transform')
+      //    console.count('transform')
 
       const permissions = derivePermissions(code)
 
@@ -47,7 +47,7 @@ function manifest({ src, dest, pkg } = {}) {
     },
 
     generateBundle({ file }, bundle) {
-      console.count('generateBundle')
+      //    console.count('generateBundle')
 
       // permissions cache
       const name = path.basename(file)
