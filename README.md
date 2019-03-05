@@ -1,26 +1,28 @@
-# rollup-plugin-update-manifest
+# rollup-plugin-auto-manifest
 
 Update your Chrome Extension `manifest.json` automatically.
 
 ## Installation
 
 ```sh
-npm i rollup-plugin-update-manifest -D
+npm i rollup-plugin-auto-manifest -D
 ```
 
 ## Usage
 
 ```js
 import { rollup } from 'rollup'
-import { updateManifest } from 'rollup-plugin-update-manifest'
+import pkg from './package.json'
+import manifest from 'rollup-plugin-auto-manifest'
 
 rollup({
   entry: 'main.js',
   plugins: [
-    updateManifest({
+    manifest({
       // Any missing required fields will be derived from `package.json`
       src: 'src/manifest.js',
-      dest: 'dest/manifest.js'
+      dest: 'dest/manifest.js',
+      pkg
     })
   ]
 })
