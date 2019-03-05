@@ -15,7 +15,9 @@
   "devDependencies": {
     "rollup": "^1.4.0"
   },
-  "scripts": {},
+  "scripts": {
+    "postversion": "git push && npm publish"
+  },
   "repository": "bumble-org/rollup-plugin-auto-manifest",
   "keywords": [
     "rollup-plugin",
