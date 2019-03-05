@@ -86,4 +86,4 @@ function manifest({ src, dest, pkg } = {}) {
   }
 }
 
-export default manifest
+module.exports = manifest
