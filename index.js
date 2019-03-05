@@ -3,7 +3,7 @@ const jsonfile = require('jsonfile')
 const {
   derivePermissions,
   deriveManifest
-} = require('@bumble/manifest')
+} = require()
 
 /* ============================================ */
 /*                UPDATE MANIFEST               */
