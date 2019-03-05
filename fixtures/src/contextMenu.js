@@ -1,1 +1,1 @@
-// export const blah = () => chrome.contextMenus.create()
+export const blah = () => chrome.contextMenus.create({})

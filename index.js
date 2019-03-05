@@ -1,4 +1,5 @@
 const { existsSync } = require('fs')
+const path = require('path')
 const jsonfile = require('jsonfile')
 const {
   derivePermissions,
@@ -27,7 +28,8 @@ function manifest({ src, dest, pkg } = {}) {
     throw Error('options must include package.json object')
   }
 
-  const cache = {}
+  const moduleCache = {}
+  const bundleCache = {}
   let finalPermissions = ''
 
   return {
@@ -35,27 +37,45 @@ function manifest({ src, dest, pkg } = {}) {
 
     transform(code, id) {
       console.count('transform')
-      // Does the source manifest really need to exist?
-      if (!existsSync(src)) {
-        throw Error('source manifest must exist')
-      }
 
       const permissions = derivePermissions(code)
 
-      Object.assign(cache, { [id]: permissions })
-      console.log('cache', cache)
+      moduleCache[id] = permissions
+
+      // Make sure this runs when the manifest changes
+      this.addWatchFile(src)
     },
 
-    generateBundle() {
+    generateBundle({ file }, bundle) {
       console.count('generateBundle')
+
+      // permissions cache
+      const name = path.basename(file)
+
+      const bundlePermsSet = Object.keys(
+        bundle[name].modules
+      ).reduce((set, id) => {
+        moduleCache[id].forEach(perm => set.add(perm))
+
+        return set
+      }, new Set())
+
+      bundleCache[name] = [...bundlePermsSet]
+
+      // manifest
+      if (!existsSync(src)) {
+        throw Error('source manifest should exist')
+      }
+
       const srcManifest = jsonfile.readFileSync(src)
 
       const manifest = deriveManifest(
         pkg,
         srcManifest,
-        Object.values(cache).flat()
+        Object.values(bundleCache)
       )
 
+      // check for new permissions
       if (finalPermissions !== manifest.permissions.join()) {
         console.log('New permissions:', manifest.permissions)
         finalPermissions = manifest.permissions.join()

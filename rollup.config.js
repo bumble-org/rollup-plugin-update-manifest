@@ -13,10 +13,10 @@ const plugins = [
 
 export default [
   {
-    input: 'fixtures/src/index.js',
+    input: 'fixtures/src/background.js',
     output: [
       {
-        file: 'fixtures/dest/background.js',
+        file: 'fixtures/dest/background-esm.js',
         format: 'esm'
       }
     ],
