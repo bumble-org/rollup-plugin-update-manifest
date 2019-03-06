@@ -1,6 +1,7 @@
 /* eslint-env node */
 
-import manifest from './index'
+const manifest = require('./index')
+
 import pkg from './package.json'
 
 const plugins = [
