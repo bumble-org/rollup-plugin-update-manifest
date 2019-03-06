@@ -1,4 +1,5 @@
 const { existsSync } = require('fs')
+const mkdirp = require('mkdirp')
 const path = require('path')
 const jsonfile = require('jsonfile')
 const {
@@ -80,6 +81,10 @@ function manifest({ src, dest, pkg } = {}) {
         console.log('New permissions:', manifest.permissions)
         finalPermissions = manifest.permissions.join()
       }
+
+      // should recursively create dirs in path
+      const dirPath = path.dirname(dest)
+      mkdirp(dirPath, e => e && console.error(e))
 
       return jsonfile.writeFile(dest, manifest, { spaces: 2 })
     }
