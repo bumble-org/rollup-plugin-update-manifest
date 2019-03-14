@@ -1,36 +1,23 @@
 /* eslint-env node */
 
-const manifest = require('./index')
-
-import pkg from './package.json'
-
-const plugins = [
-  manifest({
-    src: 'fixtures/src/manifest.json',
-    dest: 'fixtures/dest/manifest.json',
-    pkg
-  })
-]
+// import resolve from 'rollup-plugin-node-resolve'
+// import commonjs from 'rollup-plugin-commonjs'
+// import json from 'rollup-plugin-json'
 
 export default [
   {
-    input: 'fixtures/src/background.js',
+    input: 'src/index.js',
     output: [
       {
-        file: 'fixtures/dest/background-esm.js',
-        format: 'esm'
-      }
+        file: 'build/bundle-esm.js',
+        format: 'esm',
+        sourcemap: 'inline',
+      },
+      {
+        file: 'build/bundle-cjs.js',
+        format: 'cjs',
+        sourcemap: 'inline',
+      },
     ],
-    plugins
   },
-  {
-    input: 'fixtures/src/content.js',
-    output: [
-      {
-        file: 'fixtures/dest/content.js',
-        format: 'esm'
-      }
-    ],
-    plugins
-  }
 ]

@@ -11,82 +11,78 @@ const {
 /*                UPDATE MANIFEST               */
 /* ============================================ */
 
-function manifest({ src, dest, pkg } = {}) {
+function manifest({ pkg } = {}) {
   // console.count('manifest')
 
-  if (!src) {
-    // TODO: write better error message
-    throw Error('options must include src manifest.json path')
-  }
-
-  if (!dest) {
-    // TODO: write better error message
-    throw Error('options must include dest manifest.json path')
-  }
-
   if (!pkg) {
-    // TODO: write better error message
-    throw Error('options must include package.json object')
+    throw Error(
+      'auto-manifest: options must include package.json object'
+    )
   }
 
   const moduleCache = {}
-  const bundleCache = {}
   let finalPermissions = ''
+  const manifest = {}
 
   return {
-    name: 'manifest',
+    name: 'auto-manifest',
+
+    options({ input }) {
+      // Check that input is manifest
+      if (path.basename(input) !== 'manifest.json')
+        throw new Error(
+          'auto-manifest: input is not manifest.json'
+        )
+
+      manifest.src = input
+    },
 
     transform(code, id) {
-      //    console.count('transform')
-
+      // console.count('transform')
       const permissions = derivePermissions(code)
 
       moduleCache[id] = permissions
 
       // Make sure this runs when the manifest changes
-      this.addWatchFile(src)
+      this.addWatchFile(manifest.src)
     },
 
-    generateBundle({ file }, bundle) {
-      //    console.count('generateBundle')
+    async generateBundle({ dir }, bundle) {
+      // console.count('generateBundle')
+      derivedManifest.dest = dir
 
-      // permissions cache
-      const name = path.basename(file)
+      const derivedPermsSet = Object.values(bundle)
+        .filter(({ isAsset }) => !isAsset)
+        .flatMap(({ modules }) => Object.keys(modules))
+        .reduce((set, id) => {
+          moduleCache[id].forEach(perm => set.add(perm))
 
-      const bundlePermsSet = Object.keys(
-        bundle[name].modules
-      ).reduce((set, id) => {
-        moduleCache[id].forEach(perm => set.add(perm))
+          return set
+        }, new Set())
 
-        return set
-      }, new Set())
+      const srcManifest = await jsonfile.FileSync(src)
 
-      bundleCache[name] = [...bundlePermsSet]
-
-      // manifest
-      if (!existsSync(src)) {
-        throw Error('source manifest should exist')
-      }
-
-      const srcManifest = jsonfile.readFileSync(src)
-
-      const manifest = deriveManifest(
-        pkg,
-        srcManifest,
-        Object.values(bundleCache)
-      )
+      const derivedManifest = deriveManifest(pkg, srcManifest, [
+        ...derivedPermsSet
+      ])
 
       // check for new permissions
-      if (finalPermissions !== manifest.permissions.join()) {
-        console.log('New permissions:', manifest.permissions)
-        finalPermissions = manifest.permissions.join()
+      if (
+        finalPermissions !== derivedManifest.permissions.join()
+      ) {
+        console.log(
+          'New permissions:',
+          derivedManifest.permissions
+        )
+        finalPermissions = derivedManifest.permissions.join()
       }
 
       // should recursively create dirs in path
-      const dirPath = path.dirname(dest)
-      mkdirp(dirPath, e => e && console.error(e))
+      mkdirp(dir, e => e && console.error(e))
 
-      return jsonfile.writeFile(dest, manifest, { spaces: 2 })
+      return jsonfile.writeFile(dir, derivedManifest, {
+        spaces: 2
+      })
     }
   }
 }

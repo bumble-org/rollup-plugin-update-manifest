@@ -2,31 +2,48 @@
   "name": "rollup-plugin-auto-manifest",
   "version": "0.3.2",
   "description": "Create and update your Chrome Extension manifest.json automagically ✨.",
-  "main": "index.js",
+  "main": "build/bundle-cjs.js",
+  "module": "build/bundle-esm.js",
+  "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
+    "eslint": "^5.11.0",
+    "events.once": "^2.0.2",
+    "jest": "^24.2.0-alpha.0",
+    "rollup": "^1.6.0",
+    "sucrase": "^3.9.5"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "test": "jest",
+    "preversion": "npm run build",
+    "postversion": "git push && npm publish"
+  },
+  "jest": {
+    "transform": {
+      ".(js|jsx|ts|tsx)": "@sucrase/jest-plugin"
+    },
+    "setupFilesAfterEnv": [
+      "./tests/jest.setup.js"
+    ]
+  },
   "files": [
-    "index.js"
+    "build"
   ],
   "dependencies": {
-    "@bumble/manifest": "^0.1.1",
+ "@bumble/manifest": "^0.1.1",
     "jsonfile": "^5.0.0",
     "lodash.startcase": "^4.4.0",
     "mkdirp": "^0.5.1",
     "rollup-pluginutils": "^2.4.1"
   },
-  "devDependencies": {
-    "rollup": "^1.4.1"
-  },
-  "scripts": {
-    "start": "rollup -c -w",
-    "postversion": "git push && npm publish"
-  },
-  "repository": "bumble-org/rollup-plugin-auto-manifest",
+ "repository": "bumble-org/rollup-plugin-auto-manifest",
   "keywords": [
     "rollup-plugin",
     "chrome-extension",
     "manifest.json",
     "automation"
-  ],
-  "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
-  "license": "MIT"
+  ]
 }
