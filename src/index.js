@@ -1,4 +1,3 @@
-import { existsSync } from 'fs'
 import mkdirp from 'mkdirp-promise'
 import path from 'path'
 import jsonfile from 'jsonfile'
@@ -11,7 +10,7 @@ import {
 /*                UPDATE MANIFEST               */
 /* ============================================ */
 
-export default function manifest({ pkg } = {}) {
+export default function autoManifest({ pkg } = {}) {
   // console.count('manifest')
 
   if (!pkg) {

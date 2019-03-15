@@ -4,20 +4,24 @@
 // import commonjs from 'rollup-plugin-commonjs'
 // import json from 'rollup-plugin-json'
 
-export default [
-  {
-    input: 'src/index.js',
-    output: [
-      {
-        file: 'build/bundle-esm.js',
-        format: 'esm',
-        sourcemap: 'inline',
-      },
-      {
-        file: 'build/bundle-cjs.js',
-        format: 'cjs',
-        sourcemap: 'inline',
-      },
-    ],
-  },
-]
+export default {
+  input: 'src/index.js',
+  output: [
+    {
+      file: 'build/bundle-esm.js',
+      format: 'esm',
+      sourcemap: 'inline',
+    },
+    {
+      file: 'build/bundle-cjs.js',
+      format: 'cjs',
+      sourcemap: 'inline',
+    },
+  ],
+  external: [
+    'mkdirp-promise',
+    'path',
+    'jsonfile',
+    '@bumble/manifest',
+  ],
+}
